@@ -1,0 +1,101 @@
+---
+title: "HW01 - Getting started with Rmd files"
+author: "Xuanpei Ouyang"
+date: "September 7, 2016"
+output: html_document
+subtitle: Stat 133, Fall 2016, Prof. Sanchez
+---
+
+# Introduction
+
+With the evolution of the technology, data science has largely changed our daily lives in both academia and industry, such as education, communication, healthcare and business. In the introduction chapter "**_What is Data Science?_** " from book "**_Doing Data Science_** ", the authors **Rachel Schutt** and **Cathy O’Neil** discuss the influence of data science, the current landscape of data science and expectation of data science. From my perspective, this article clarifies some common misconception about data science and also explain what data science is by discussing the idea of big data as well as its roles in academia and industry. In this essay, I will talk about my understanding of [**big data**][Big Data], [**datafication**][Datafication] and [**data science**][Data Science]. 
+
+
+# Discussion
+
+### Big Data
+
+> Information is the oil of the 21st century, and analytics sit eh combustion engine.
+> 
+> -- **Peter Sondergaard** 
+
+Big data is the foundation of data science. As many people know, data science is about turning massive datasets into meaningful conclusions and creative ideas. The advance of internet and technology helps collect and store such large amount of data as well as provides data scientists many tools to manipulate the information.  
+Big data is valuable because it contains the information and patterns about how the majority of the world works and behaves. Thus, big data is potentially informative. Big data should also be large enough to be representative for the entire group. Data scientists are able to draw informative and insightful conclusions only when their analysis is based on the datasets that are large enough to be representative. Thus, I think big data is the most foundemental part of data science and analysis.
+
+
+### Datafication
+
+In this book, the authors says that:
+
+> "*Datafication* " is a process of "*taking all aspects of life and turning them into data.*".  
+
+I think datafication facilitates data collection and storage by turning people's daily bheavior into something like numbers that can be measured, compared and calculated. For example, the conversations between people become the excel sheet of word frequencies, online videos and images are stored as numbers in matrices and the popularity is quatifies by the number of followers on facebook ot twitter.  
+Here is a specific exmaple of the datafication of information about cars. It includes the speed and distance of cars for furthure evaluation the quality of cars.
+
+```{r cars}
+summary(cars)
+```
+
+The extra step a data scientist can do is to calculate the mean value of `speed`, which is `r mean(cars$speed)`.  
+
+
+On the other hand, as more and more people are interested in collecting data for their analysis and study, I think privacy and ehtics are also very important topics in big data. As people tend to do their works and share their lives online in recent times, those information they shared online, intentionally or unintentionally, may be misused for illegal or malicious purposes.
+
+
+### Data Science
+
+Data science is a interdisciplinary field that not only requires conceptual understanding but also emphasize on the real world expertise. Thanks to **datafication** and **big data**, data from different fields are already collected and stored. However, most of the real world data is too much and messy. It doesn't make sense and people cannot just draw conclusions at a glance. As a result, after obtaining the big data, data scientists need to take the extra step to format it, process it and interpret it. By analyzing and interpreting big data, data scientists are able to draw insightful conclusions, solve real world problems and help people's decision-making process.
+
+The general responsibilities of data scientists usually includes:
+
+1. learning about expertise and data in different disciplines
+2. extracting useful information from large and complicated datasets 
+3. applying the study result to solving real world problem
+
+To better explain data science, the authors compares the role of data science and gives some real world examples about data scientists' tasks in academia and industry.
+
+##### Academia
+In academia, data science does not exist as a field on its own. 
+Instead, many professionals from different academic disciplines work together to solve real world problems.
+Also, there are lots of courses offered in colleges such as "[*STAT 133: Concepts in Computing with Data*][stat133] " to help students learn tools to understand and process big data.
+
+[stat133]: http://gastonsanchez.com/stat133/
+
+##### Industry
+In industry, data scientists need to make important decisions by the information extracted from big data and help professionals in other fields understand the implications of big data as well.
+
+
+### Skills
+The article also talks about what the data science is based on skills a data scientist needs from Nathan's post, which mainly are
+
+* Statistics - traditional analysis
+* Data munging - parsing, scraping, formating and processing data
+* Visualization - graphs, tools, communication and presentation
+
+
+Refer to [Drew Conway's Venn diagram of data science](http://static1.squarespace.com/static/5150aec6e4b0e340ec52710a/t/51525c33e4b0b3e0d10f77ab/1364352052403/Data_Science_VD.png), as a student planning to double major in computer science and statistics, currently I will locate myself into the ***Hacking Skills*** area. However, my career goal is to place myself in the ***Machine Learning*** area by learning hacking skills as well as obtaining math & statistics knowledge.
+
+![](http://static1.squarespace.com/static/5150aec6e4b0e340ec52710a/t/51525c33e4b0b3e0d10f77ab/1364352052403/Data_Science_VD.png)
+
+Also, following Rachel's in-class activity, I made my data science profile which also corresponds to my self-reporting location in the venn diagram of data science.  
+
+**My Data Science Profile**  
+
+| Skills      | Self-Ranking  |
+| :-------:   | :----: |
+| Computer science | \|\|\|\|\|  |
+| Math | \|\|\|\| |
+| Communication | \|\|\|\| |
+| Machine learning | \|\|\|\| | 
+| Data visualization| \|\|\| |
+| Statistics | \|\|\| | 
+| Domain expertise | \|\| |
+
+
+# Conclusions
+In conclusion, I think data science is also a practical science that based on the big data from real world. Also, the development of internet facilitate the datafication of our daily lives and, thus, data scientists are able to access to a large volume of representative datasets, develop algorithm for analyzing them and make insightful decisions. In addition, data science is a very broad field that also needs people cross many disciplines to work together to solve problems. 
+
+
+# References
+
+Schutt, Rachel, and Cathy O'Neil. "What is Data Science?" *Doing Data Science*. O'Reilly 2014. Web. 3 Sep. 2016.

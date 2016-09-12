@@ -1,28 +1,36 @@
 ---
 title: "Lab1-Practice-Rmd"
-output: pdf_document
+author: "Xuanpei Ouyang"
+output: html_document
+date: "September 2, 2016"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-## R Markdown
+# Heading 1 largest title
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Heading 2
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+### Heading 3
 
-```{r cars}
-summary(cars)
-```
+#### Heading 4
 
-## Including Plots
+##### Heading 5
 
-You can also embed plots, for example:
+###### Heading 6
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+This is *italics text*
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+This is also _*italics text*_
+
+This is **bold text**
+
+This is ***bold italics text***
+
+This is [name for the link](http://estheroy.com)
+
+Bullet point
+* a1
+* a2
+** a3
+Also can do Next layer in bullet point
+

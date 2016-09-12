@@ -1,9 +1,9 @@
 ---
-title: "Lab 1: Getting started with R"
-subtitle: "Stat 133, Fall 2016"
+title: 'Lab 1: Getting started with R'
 author: "Gaston Sanchez"
-header-includes: \usepackage{float}
 output: html_document
+subtitle: Stat 133, Fall 2016
+header-includes: \usepackage{float}
 ---
 
 > ### Learning Objectives
@@ -287,13 +287,37 @@ library(knitr)
 ### Your turn
 
 - Install packages `"stringr"`, `"RColorBrewer"`
+
+```r
+# install.packages("stringr")
+# install.packages("RColorBrewer")
+```
+
 - Calculate: $3x^2 + 4x + 8$ when $x = 2$
+
+```r
+x = 2
+3 * x ^ 2 + 4 * x + 8
+```
+
 - Look for the man (i.e. help) documentation of the function `exp`
+
+```r
+help("exp")
+```
 - Find out how to look for information about binary operators
 like `+` or `^`
+
+```r
+help.search("operator")
+```
+
 - There are several tabs in the pane `Files, Plots, Packages, Help, Viewer`.
 Find what does the tab __Files__ is good for?
 
+```r
+# For selecting the files in the working directory (The current folder where the file locates)
+```
 -----
 
 ## Introduction to Markdown

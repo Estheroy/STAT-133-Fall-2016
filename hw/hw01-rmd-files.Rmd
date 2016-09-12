@@ -1,7 +1,7 @@
 ---
 title: "HW01 - Getting started with Rmd files"
-subtitle: "Stat 133, Fall 2016, Prof. Sanchez"
-author: "Your Name"
+author: "Xuanpei Ouyang"
+subtitle: Stat 133, Fall 2016, Prof. Sanchez
 output: html_document
 ---
 
@@ -48,3 +48,5 @@ Make sure to include the following elements (using markdown syntax):
 - Breaklines
 
 -----
+
+
