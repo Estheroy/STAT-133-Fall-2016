@@ -1,0 +1,314 @@
+---
+title: "HW02 - Data tables and graphics"
+subtitle: "Stat 133, Fall 2016, Prof. Sanchez"
+author: "Xuanpei Ouyang"
+output: html_document
+---
+
+This assignment has 4 main purposes:
+
+- practicing reading data tables
+- working with data frames, vectors and factors
+- practice basic manipulation of data structures
+
+Download this file or open an `Rmd` file in RStudio and copy the
+contents of this file.
+
+You need to change the directory `wd_root` to be **your preferred local** 
+directory
+
+```{r global_options, warning=FALSE}
+# Change wd_root to be your preferred local directory
+wd_root <- "~/Downloads"
+
+# Load knitr and set global directory
+library(knitr)
+
+# Set the global working directory for knitr
+knitr::opts_knit$set(root.dir = wd_root)
+
+# You can uncomment the following line if you need to 
+# run R code manually in RStudio rather than using knitr
+# setwd(wd_root)
+```
+
+## Data set Camping Tents
+
+Start by practicing reading tables in R. The data for this assignment is in the 
+file `camping-tents.csv` (available in the folder `data/` in the 
+github repository of the course)
+
+Use `download.file()` to download the file `camping-tents.csv` in your computer.
+You'll have to specify your own destination (`destfile`)
+e.g. in my case I'm specifying: `"~/Downloads/camping-tents.csv"`
+(your `destfile` will probably be different!)
+```{r, cache=TRUE}
+download.file(
+  url = 'https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2016/master/data/camping-tents.csv', 
+  destfile = '~/Downloads/camping-tents.csv')
+```
+
+- __Importing A:__ Use `read.csv()` to import `camping-tents.csv` and assign 
+it to an object called `tdf1`
+```{r}
+# import using 'read.csv()'
+
+tdf1 = read.csv('camping-tents.csv')
+```
+
+
+- __Importing B:__ Use `read.csv()` to import `camping-tents.csv` and assign 
+it to an object called `tdf2`. In this case, strings must NOT be converted into 
+factors!
+```{r}
+# import using 'read.csv()' without converting strings into factors
+
+tdf2 = read.csv('camping-tents.csv', stringsAsFactors = FALSE)
+```
+
+
+- __Importing Option 3:__ Create a character vector `col_class` with the 
+following classes for the columns (to be used with argument `colClasses`)
+  - name:     `character`
+  - brand:    `character`
+  - price:    `numeric`
+  - weight:   `numeric`
+  - height:   `integer`
+  - bestuse:  `factor`
+  - seasons:  `factor`
+  - capacity: `factor`
+
+Use `read.table()` to import `camping-tents.csv` and assign it to 
+an object called `tdf3`. Pass the vector `col_class` to the argument 
+`colClasses`, and specify the apropriate field separator, and header.
+
+```{r}
+# import using 'read.csv()' specifying `colClasses
+
+col_class = c(
+  'character', 
+  'character', 
+  'numeric', 
+  'numeric', 
+  'integer', 
+  'factor', 
+  'factor', 
+  'factor'
+)
+
+tdf3 = read.csv('camping-tents.csv', header = TRUE, sep = ',', colClasses = col_class)
+```
+
+
+- __Importing Option 4:__ Use `read_csv()` from package `"readr"` to import 
+`camping-tents.csv` and assign it to an object called `tents`.
+Use the argument `col_types` to specify column types:
+  - name:     `character`
+  - brand:    `character`
+  - price:    `numeric`
+  - weight:   `numeric`
+  - height:   `integer`
+  - bestuse:  `factor`
+  - seasons:  `factor`
+  - capacity: `factor`
+
+
+```{r}
+# import using 'read_csv()'
+library(readr)
+
+col_types_list = list(
+  name = col_character(),
+  brand = col_character(),
+  price = col_number(),
+  weight = col_number(),
+  height = col_integer(),
+  bestuse = col_factor( c('Backpacking', 'Mountaineering', 'Carcamping') ),
+  seasons = col_factor( c('3-season', '4-season', '3-4-season') ),
+  capacity = col_factor( c('1-person', '2-person', '3-person', '4-person', '6-person') )
+)
+
+tents = read_csv('camping-tents.csv', col_types = col_types_list)
+```
+
+
+-----
+
+## Inspecting data frames
+
+Once you have your data frame `tents`, the next step 
+involves performing a first exploration.
+
+```{r}
+# inspect the data structure of 'tents'
+str(tents)
+
+# display the names of columns in 'tents'
+colnames(tents)
+
+# take a look at the first 5 rows
+head(tents, 5)
+
+# take a look at the last 3 rows
+tail(tents, 3)
+```
+
+
+### Quantitative Variables:
+
+Exploring the quantitative variables. Instead of using the `summary()` function, 
+find functions that allow you to get the following summaries for `price`
+
+- minimum value
+- first quartile (i.e. 25th percentile)
+- third quartile (i.e. 75th percentile)
+- 90th percentile
+- median value (i.e. 50th percentile)
+- mean value
+- maximum value
+- inter-quartile range (IQR)
+- standard deviation
+
+```{r}
+# your code
+# find minimum value
+min(tents$price)
+# find first, thrid quartile, 90th percentile
+quantile(tents$price, c(0.25, 0.75, 0.9))
+# find median value (two ways)
+median(tents$price)
+quantile(tents$price, c(0.5))
+# find mean value
+mean(tents$price)
+# find maximum value
+max(tents$price)
+# inter-quartile range
+IQR(tents$price)
+# standard deviation
+sd(tents$price)
+```
+
+
+Add a new variable `weight_lbs` to the data frame `tents` for weight in pounds.
+Keep in mind that `weight` is given in grams.
+```{r}
+# add weight_lbs
+grams_to_lbs = 0.00220462262185 * tents$weight
+tents$weight_lbs = grams_to_lbs
+```
+
+Add a new variable `height_in` to the data frame `tents` for height in inches.
+Keep in mind that `height` is given in centimeters.
+```{r}
+# add height_in
+centimeters_to_inches = 0.39370079 * tents$height
+tents$height_in = centimeters_to_inches
+```
+
+Write R code (using bracket notation) to answer the following questions:
+```{r}
+# how many tents have a price less than or equal to $300
+length(tents$price[tents$price <= 300])
+
+# how many tents have a price between $300 and $400
+# (including both $300 and $400 prices)
+sum((tents$price >= 300) & (tents$price <= 400))
+
+# what's the name of the tent with maximum price
+tents$name[tents$price == max(tents$price)]
+
+# select the data of tents with 
+# price > $400 AND weight < 1500 grams
+pw_row_logical_index = (tents$price > 400) & (tents$weight < 1500)
+tents[pw_row_logical_index,]
+
+# calculate the 90th percentile for height and 
+# assign it to the object 'height_p90'
+height_p90 = quantile(tents$height, 0.9)
+
+# calculate the 90th percentile for weight and 
+# assign it to the object 'weight_p90'
+weight_p90 = quantile(tents$weight, 0.9)
+
+# select the data of tents with 
+# height > height_p90 AND weight > weight_p90
+p90_row_logical_index = (tents$height > height_p90) & (tents$weight > weight_p90)
+tents[p90_row_logical_index,]
+```
+
+
+-----
+
+## More Manipulations
+
+Use `subset()` to obtain a new data frame called `rei` containing the data of 
+those tents with brand `'rei'`; and inspect its dimension:
+```{r}
+# rei data frame
+rei = subset(tents, brand == 'rei')
+dim(rei)
+```
+
+
+Use `cut()` to create a factor `weight_cut` by using the
+breaking points and labels according to the following table:
+```
+-----------------------
+     intervals | labels
+---------------|-------
+     (0, 1000] |  1kg
+  (1000, 2000] |  2kg
+  (2000, 3000] |  3kg
+  (3000, 4000] |  4kg
+  (4000, 5000] |  5kg
+  (5000, 6000] |  6kg
+  (6000, 7000] |  7kg
+  (7000, 8000] |  8kg
+  (8000, 9000] |  9kg
+----------------------
+```
+
+```{r}
+# your weight_cut factor
+intervals = seq(from = 0, to = 9000, by = 1000)
+my_label = c('1kg','2kg','3kg','4kg','5kg','6kg','7kg','8kg','9kg')
+weight_cut = cut(tents$weight, breaks = intervals, labels = my_label)
+```
+
+Verify that the frequencies given by `table(weight_cut)` are:
+```
+ 1kg 2kg 3kg 4kg 5kg 6kg 7kg 8kg 9kg 
+   3  24  30   7   7   2   9   3   3 
+```
+
+```{r}
+# your verification
+table(weight_cut)
+```
+
+
+### Reordering a factor
+
+The variable `seasons` is a factor with three `levels`. You can use functions
+such as `summary()`, `nlevels()`, and `is.ordered()` to inspect any R factor
+object. In particular, you can explore the column `seasons`
+```{r eval = FALSE}
+summary(tents$seasons)
+nlevels(tents$seasons)
+is.ordered(tents$seasons)
+```
+
+Originally, `seasons` is NOT an ordinal factor.
+Find out how to use the `factor()` function in order to convert `seasons`
+as an ordinal factor. The resulting levels should be `3-season`, `3-4-season`,
+and `4-season` (in this order!). Furthermore, if you execute the command
+`is.ordered(tents$seasons)` the answer should be `TRUE`.
+
+```{r}
+# order the variable 'seasons'
+tents$seasons = factor(tents$seasons, levels = c('3-season', '3-4-season', '4-season'), ordered = TRUE)
+is.ordered(tents$seasons)
+```
+
+-----
+

@@ -1,7 +1,7 @@
 ---
 title: "Lab 2: Vectors and other data structures"
 subtitle: "Stat 133, Fall 2016"
-author: "Gaston Sanchez"
+author: "Xuanpei Ouyang"
 header-includes: \usepackage{float}
 output: html_document
 ---
@@ -32,6 +32,7 @@ rm(list = ls())
 
 Use the following code to read the data contained in the file 
 `usa-states.RData` (from the course's github repository)
+
 ``` {r}
 # download RData file into your working directory
 rdata <- "https://github.com/ucb-stat133/stat133-fall-2016/raw/master/data/usa-states.RData"
