@@ -1,0 +1,141 @@
+Lab 04 Supplement
+
+install.packages("dplyr", dependencies = TRUE)
+
+``` {r}
+library(dplyr)
+library(datasets)
+
+head(airquality)
+
+#subsetting
+filter(airquality, Temp > 70)
+filter(airquality, Temp > 80 & Month > 5)
+
+#creating columns
+mutate(airquality, TempInC = (Temp - 32) * 5/ 9)
+
+#information using groups
+summarise(airquality, mean(Temp, na.rm = TRUE))
+summarise(group_by(airquality, Month), mean(Temp, na.rm = TRUE))
+
+#random sample
+sample_n(airquality, size = 10)
+sample_frac(airquality[1:50,], size = 0.1) #rounds up
+
+#counting
+count(airquality, Month)
+
+#arranging
+arrange(airquality, desc(Month), Day)
+
+
+filteredData <- filter(airquality, Month != 5)
+groupedData <- group_by(filteredData, Month)
+summarise(groupedData, mean(Temp, na.rm = TRUE))
+
+# pipleline
+airquality %>% 
+    filter(Month != 5) %>% 
+    group_by(Month) %>% 
+    summarise(mean(Temp, na.rm = TRUE))
+
+```
+
+
+``` {r}
+library(nycflights13)
+
+dim(flights)
+head(flights)
+
+filter(flights, month == 1, day == 1)
+flights[flights$month == 1 & flights$day == 1, ]
+filter(flights, month == 1 | month == 2) # && only compares the first element, would give empty df
+slice(flights, 1:10)
+
+arrange(flights, year, month, day)
+arrange(flights, desc(arr_delay))
+flights[order(flights$year, flights$month, flights$day), ] #flights priority
+flights[order(flights$arr_delay, decreasing = TRUE), ]
+flights[order(-flights$arr_delay), ]
+
+select(flights, year, month, day)
+select(flights, year:day) #inclusive
+select(flights, -(year:day))
+
+select(flights, tail_num = tailnum) #renaming the column tailnum
+rename(flights, tail_num = tailnum)
+
+distinct(flights, tailnum)
+distinct(flights, origin, dest) #pairwise unique?
+
+mutate(flights,
+  gain = arr_delay - dep_delay,
+  speed = distance / air_time * 60)
+mutate(flights,
+  gain = arr_delay - dep_delay,
+  gain_per_hour = gain / (air_time / 60) #  refer to columns that you’ve just created
+)
+transform(flights,
+  gain = arr_delay - delay,
+  gain_per_hour = gain / (air_time / 60)
+)
+
+summarise(flights,
+  delay = mean(dep_delay, na.rm = TRUE))
+sample_n(flights, 10)
+sample_frac(flights, 0.01) #replace=TRUE for bootstrap sampling
+
+by_tailnum <- group_by(flights, tailnum)
+delay <- summarise(by_tailnum,
+  count = n(), # n is unique in dplyr
+  dist = mean(distance, na.rm = TRUE),
+  delay = mean(arr_delay, na.rm = TRUE))
+delay <- filter(delay, count > 20, dist < 2000)
+
+library(ggplot2)
+ggplot(delay, aes(dist,delay)) +
+  geom_point(aes(size = count), alpha = 1/2) + 
+  geom_smooth() +
+  scale_size_area()
+
+destinations <- group_by(flights, dest)
+summarise(destinations,
+  planes = n_distinct(tailnum),
+  flights = n()
+)
+
+daily <- group_by(flights, year, month, day)
+per_day <- summarise(daily, flights = n())
+per_month <- summarise(per_day, flights = sum(flights))
+per_year  <- summarise(per_month, flights = sum(flights))
+
+a1 <- group_by(flights, year, month, day)
+a2 <- select(a1, arr_delay, dep_delay)
+a3 <- summarise(a2,
+  arr = mean(arr_delay, na.rm = TRUE),
+  dep = mean(dep_delay, na.rm = TRUE))
+a4 <- filter(a3, arr > 30 | dep > 30)
+
+filter(
+  summarise(
+    select(
+      group_by(flights, year, month, day),
+      arr_delay, dep_delay
+    ),
+    arr = mean(arr_delay, na.rm = TRUE),
+    dep = mean(dep_delay, na.rm = TRUE)
+  ),
+  arr > 30 | dep > 30
+)
+
+flights %>%
+  group_by(year, month, day) %>%
+  select(arr_delay, dep_delay) %>%
+  summarise(
+    arr = mean(arr_delay, na.rm = TRUE),
+    dep = mean(dep_delay, na.rm = TRUE)
+  ) %>%
+  filter(arr > 30 | dep > 30)
+```

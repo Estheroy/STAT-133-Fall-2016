@@ -304,12 +304,14 @@ x = 2
 
 ```r
 help("exp")
+?exp
 ```
 - Find out how to look for information about binary operators
 like `+` or `^`
 
 ```r
-help.search("operator")
+help.search("+")
+help.search("^")
 ```
 
 - There are several tabs in the pane `Files, Plots, Packages, Help, Viewer`.

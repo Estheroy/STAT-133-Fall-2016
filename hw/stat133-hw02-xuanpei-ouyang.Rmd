@@ -128,7 +128,7 @@ col_types_list = list(
   capacity = col_factor( c('1-person', '2-person', '3-person', '4-person', '6-person') )
 )
 
-tents = read_csv('camping-tents.csv', col_types = col_types_list)
+tents = read_csv('~/Downloads/camping-tents.csv', col_types = col_types_list)
 ```
 
 

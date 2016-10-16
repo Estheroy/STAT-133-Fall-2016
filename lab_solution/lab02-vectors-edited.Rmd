@@ -1,7 +1,7 @@
 ---
 title: "Lab 2: Vectors and other data structures"
 subtitle: "Stat 133, Fall 2016"
-author: "Xuanpei Ouyang"
+author: "Gaston Sanchez"
 header-includes: \usepackage{float}
 output: html_document
 ---
@@ -25,7 +25,11 @@ wikipedia has about the States of the United States
 
 Open a new session in Rstudio, and make sure you have a clean
 workspace:
+
 ``` {r}
+# OH 
+'http://www.when2meet.com/?5424066-XRXIs'
+
 # remove existing objects
 rm(list = ls())
 ```
@@ -54,6 +58,7 @@ Confirm that you have the following objects:
 - `seats` (number of house seats)
 
 
+
 ### Inspecting the data objects
 
 Once you have some data objects to work with, the first step is to
@@ -72,21 +77,21 @@ allows you to examine objects:
 
 Let's find out what is the class of each of the objects:
 ```{r}
-class(state)
-class(capital)
+
 class(area)
+class(capital)
+class(rdata)
+class(seats)
+class(state)
 class(water)
+
 ```
 
 Now use `length()`, `head()`, `tail()`, and `summary()` to start exploring
 the content of the objects:
 ```{r}
-# your code here
-length(area)
-head(area)
-tail(area)
-summary(area)
-str(area)
+objects = data.frame(area,capital, seats, state,water)
+lapply(X = objects, MARGIN = 2,FUN = head)
 ```
 
 
@@ -101,25 +106,53 @@ name to indicate that all the elements of a vector must be of the same type,
 either all numbers, all characters, or all logical values. 
 
 How do you know that a given vector is of a certain data type? With `typeof()`
-```r
+
+``` {r}
 typeof(state)
 typeof(capital)
 typeof(area)
 typeof(water)
 ```
 
+``` {r}
+
+y <- 'timo'
+class(y) # character vector
+mode(y) # what is contained
+x <- 1:16
+class(x)
+mode(x)
+dim(x)
+dim(x) <- c(4,4)
+class(x)
+mode(x)
+mode(x) <- 'character'
+class(x)
+mode(x)
+x
+
+x <- factor(x, ordered = TRUE) # levels: categorical(character) variables in R
+x 
+level = levels(x)
+level
+class(x)
+mode(x)
+
+
+```
 
 ## Manipulating Vectors: Subsetting
 
 Subsetting refers to extracting elements of a vector (or another R object). 
 To do so, you use what is known as __bracket notation__. This implies using 
 (square) brackets `[ ]` to get access to the elements of a vector:
-```r
+``` {r}
 # first element of 'state'
 state[1]
 
 # first five elements of 'state'
 state[1:5]
+
 ```
 
 What type of things can you specify inside the brackets? Basically:
@@ -134,7 +167,7 @@ of the vector to be subset)
 
 Here are some subsetting examples using a numeric vector inside the 
 brackets:
-```r
+``` {r}
 # fifth element of 'state'
 state[5]
 
@@ -162,7 +195,9 @@ To do logical subsetting, the vector that you put inside the brackets,
 must match the length of the manipulated vector.
 
 Here are some examples of logical subsetting:
-```r
+``` {r}
+state[c(TRUE, FALSE)]
+
 # area of California
 area[state == 'California']
 
@@ -179,6 +214,8 @@ state[area > 100000 & area < 125000]
 Write commands to answer the following questions:
 
 ```{r}
+capital[which(state == 'California')]
+
 # name of the state with largest area
 state[area == max(area)]
 
@@ -201,36 +238,46 @@ vector.
 
 None of the vectors `state`, `capital`, `area`, `water`, and `seats` have names.
 You can confirm that with the `names()` function applied on any of the vectors:
-```r
+``` {r}
 names(state)
+
+names(state) <- 'timo'
+state
+names(state)
+
+x <- c('a' = 1, 'b' = 2)
+x
+names(x)
+
 ```
 
 Create a new vector `total` by adding `area` and `water`, and then assign 
 `state` as the names of `total`
-```r
+``` {r}
 # create 'total
 total = area + water
 
-
 # assign 'state' as names of 'total'
-names(total) = state
+names(total) <- state
 total
+
 ```
 
 You should have a vector `total` with named elements. Now you can use
 character subsetting:
-```r
-total["Alabama"]
+``` {r}
+total["Alabama"] #can't call by the elements, only by indices or names
 
 total[c("California", "Oregon", "Washington")]
 
 total[c("Texas", "Alaska")]
 ```
 
+
 ### Some plotting
 
 Use the function `plot()` to make a scatterplot of `area` and `water`
-```r
+``` {r}
 plot(area, water)
 ```
 
@@ -243,13 +290,14 @@ Looking at the generated plot, can you see any issues?
 To get a better display of the scatterplot, let's create two vectors
 `log_area` and `log_water` by transforming `area` and `water` with the 
 logarithm function `log()`
-```r
+``` {r}
 log_area <- log(area)
 log_water <- log(water)
 ```
 
 Make another scatterplot but now use the log-transformed vectors:
-```{r, eval = FALSE}
+```{r, echo = FALSE} 
+# https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
 plot(log_area, log_water)
 ```
 
@@ -263,7 +311,7 @@ Now we have another problem. The labels in the plot are a bit messy. A quick
 and dirty fix is to use `abbreviate()` to shorten the displayed names:
 ```{r, eval = FALSE}
 plot(log_area, log_water)
-text(log_area, log_water, labels = abbreviate(state))
+text(log_area, log_water, labels = abbreviate(state)) # 4 characters
 ```
 
 
@@ -284,13 +332,13 @@ But not in R.
 
 Another example of vectorization would be the calculation of the square root 
 of all the elements in `area` and `water`:
-```r
+``` {r}
 sqrt(area)
 sqrt(water)
 ```
 
 Or the sum of `area` plus `water` to get the total area:
-```r
+``` {r}
 area + water
 ```
 
@@ -307,6 +355,7 @@ and you will exploit vectorization with other useful functions known as the
 _apply_ family functions (we'll talk about them later in the course).
 
 
+
 ## Recycling
 
 Closely related with the concept of _vectorization_ we have the notion of
@@ -319,8 +368,12 @@ square miles. To convert from square kilometers to aquare miles use the
 following conversion: 
 1 sqr km = 0.386 sqr mi
 ```{r}
-area*0.386
-water*0.386
+
+area_square_miles <- 0.386*area
+area_square_miles
+water_square_miles <- 0.386*water
+water_square_miles
+
 ```
 
 What you just did (assuming that you did things correctly) is called 
@@ -343,15 +396,14 @@ the length of the longer vector (i.e. `area`).
 Here's another example of recycling. Areas of elements in an odd number 
 position will be transformed to square miles; areas of elements in an even 
 number position will be transformed to acres:
-```r
+``` {r}
 units <- c(0.386, 247.105)
 new_area <- area * units
-new_area
 ```
 
 The elements of `units` are recycled and repeated as many times as elements
 in `area`. The previous command is equivalent to this:
-```r
+``` {r}
 new_units <- rep(c(0.386, 247.105), length.out = length(area))
 area * new_units
 ```
@@ -363,13 +415,9 @@ transforming the vectors into log scale (use `log()`)
 
 ```{r}
 # your scatter plot
-area_square_miles = area*0.386
-water_square_miles = water*0.386
 
-area_square_miles_log = log(area_square_miles)
-water_square_miles_log = log(water_square_miles)
+plot(log(area_square_miles), log(water_square_miles))
 
-plot(area_square_miles_log, water_square_miles_log)
 ```
 
 -----
@@ -396,12 +444,11 @@ vector as input. The vector can be either numeric, character or logical.
 ```{r}
 # numeric vector
 num_vector <- c(1, 2, 3, 1, 2, 3, 2)
-num_vector
 
 # creating a factor from num_vector
 first_factor <- factor(num_vector)
+
 first_factor
-levels(first_factor)
 ```
 
 You can also obtain a factor from a character vector:
@@ -434,6 +481,7 @@ is by using the function `storage.mode()`
 ```{r}
 # storage of factor
 storage.mode(first_factor)
+typeof(first_factor)
 ```
 
 ### Manipulating Factors
@@ -447,28 +495,9 @@ first_factor[c(1, 3, 5)]
 
 first_factor[rep(1, 5)]
 
-second_factor
-
 second_factor[second_factor == 'a']
 
 second_factor[second_factor == 'b']
 ```
 
 -----
-
-```{r}
-x = 1:16
-class(x)
-mode(x)
-
-dim(x) = c(4,4)
-x
-
-mode(x) = "character"
-x
-
-x = factor(x, ordered= TRUE)
-x
-level = levels(x)
-level
-```
