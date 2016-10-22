@@ -1,8 +1,8 @@
 ---
 title: "Midterm Project"
-subtitle: "Stat 133, Fall 2016, Prof. Sanchez"
 author: "Xuanpei Ouyang"
 output: pdf_document
+subtitle: Stat 133, Fall 2016, Prof. Sanchez
 header-includes: \usepackage{float}
 ---
 
@@ -49,8 +49,8 @@ data sets in R.
 
 ```{r}
 # download.file(
-#   url = 'https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2016/master
-#   /data/womens-high-jump-raw.csv', 
+#   url = 'https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2016/
+#  master/data/womens-high-jump-raw.csv', 
 #   destfile = '~/Desktop/STAT 133/stat133-my-repo/midterm_project/
 #   womens-high-jump-raw.csv')
 
@@ -98,6 +98,8 @@ height = extract_height(womens_high_jump_raw$Height)
 
 ```
 
+Clean the column `height` by keeping the meter units and removing the values
+in US customary units.
 
 ### Column `Athlete`
 
@@ -111,6 +113,9 @@ athlete = extract_athlete(womens_high_jump_raw$Athlete)
 
 ```
 
+Clean the column `athlete` by extracting the name of athlete from the Athlete
+column.
+
 Likewise, use your function to extract the country names to create a new __character__ vector `country` that contains the initials of the countries:
 
 ```{r}
@@ -119,6 +124,8 @@ country = extract_country(womens_high_jump_raw$Athlete)
 
 ```
 
+Extract the column `country` by extracting the country name inside parenthesis
+from the Athlete column.
 
 ### Column `Date`
 
@@ -134,6 +141,9 @@ day = extract_day(womens_high_jump_raw$Date)
 
 ```
 
+Extract the column `day` by extracting the first number (day) from the Date 
+column.
+
 - Use your function to extract the month names to create a new __character__ 
 vector `month`:
 
@@ -142,6 +152,9 @@ vector `month`:
 month = extract_month(womens_high_jump_raw$Date)
 
 ```
+
+Extract the column `month` by extracting the second number (month) from the 
+Date column.
 
 - Use your function to extract the year number to create a new __numeric__ 
 vector `year`:
@@ -152,6 +165,9 @@ year = extract_year(womens_high_jump_raw$Date)
 
 ```
 
+Extract the column `year` by extracting the thrid number (year) from the Date 
+column.
+
 Likewise, use your function to reformat date to create a new vector `new_date` 
 by reformatting the values in column `Date`:
 
@@ -161,6 +177,7 @@ new_date = reformat_date(womens_high_jump_raw$Date)
 
 ```
 
+Reformat the date to a new vector in year-month-day format.
 
 ### Column `Place`
 
@@ -173,6 +190,7 @@ city = remove_brackets(womens_high_jump_raw$Place)
 
 ```
 
+Extract the column `city` by removing the brackets from Place column.
 
 ### New vector `gender`
 
@@ -206,8 +224,14 @@ womens = data.frame(
   year = year,
   stringsAsFactors = FALSE
 )
+
+str(womens)
 ```
 
+Now, I obtain a clean dataset for women's high jump world records with 
+9 columns which are height, athlete, gender, country, city, date, day, month
+and year. Also I convert all the data column to appropriate data type for
+manipulating and ploting data in the later section. 
 -----
 
 
@@ -226,6 +250,8 @@ values to generate a new __numeric__ vector `height` with the values of meters:
 height = extract_height(mens_high_jump_raw$Height)
 ```
 
+Clean the column `height` by keeping the meter units and removing the values
+in US customary units.
 
 ### Column `Athlete`
 
@@ -239,6 +265,9 @@ athlete = extract_athlete(mens_high_jump_raw$Athlete)
 
 ```
 
+Clean the column `athlete` by extracting the name of athlete from the Athlete
+column.
+
 Likewise, use your function to extract the country names to create a new
 __character__ vector `country` that contains the initials of the countries:
 
@@ -248,6 +277,8 @@ country = extract_country(mens_high_jump_raw$Athlete)
 
 ```
 
+Extract the column `country` by extracting the country name inside parenthesis
+from the Athlete column.
 
 ### Column `Venue`
 
@@ -280,6 +311,8 @@ clean_date = remove_brackets(mens_high_jump_raw$Date)
 
 ```
 
+Clean the `Date` by removing the brackets followed the data of date
+
 Now take `clean_date` to create three new vectors: `day`, `month`, and `year`.
 
 - Use your function to extract the day numbers to create a new __numeric__ 
@@ -291,6 +324,9 @@ day = extract_day(clean_date)
 
 ```
 
+Extract the column `day` by extracting the first number (day) from the Date 
+column.
+
 - Use your function to extract the month names to create a new __character__ 
 vector `month`:
 
@@ -299,6 +335,9 @@ vector `month`:
 month = extract_month(clean_date)
 
 ```
+
+Extract the column `month` by extracting the second number (month) from the 
+Date column.
 
 - Use your function to extract the year number to create a new __numeric__ 
 vector `year`:
@@ -309,6 +348,9 @@ year = extract_year(clean_date)
 
 ```
 
+Extract the column `year` by extracting the third number (year) from the 
+Date column.
+
 Likewise, use your function to reformat date to create a new vector `new_date` 
 by reformatting the values in column `Date`:
 
@@ -318,6 +360,7 @@ new_date = reformat_date(clean_date)
 
 ```
 
+Reformat the date to a new vector in year-month-day format.
 
 ### New vector `gender`
 
@@ -353,7 +396,14 @@ mens = data.frame(
   stringsAsFactors = FALSE
 )
 
+str(mens)
 ```
+
+Here, I obtain a clean dataset for men's high jump world records with 
+9 columns which are height, athlete, gender, country, city, date, day, month
+and year. Also, I convert all the data column to appropriate data type for
+manipulating and ploting data in the later section. 
+
 
 -----
 
@@ -366,12 +416,20 @@ converted as R factors. Make sure that the column `date` is of class `"Date"`.
 ```{r}
 # new data frame 'records'
 records = rbind(womens, mens)
-records[,3] = factor(records[,3])
-records[,4] = factor(records[,4])
+records$gender = as.factor(records$gender)
+records$country = as.factor(records$country)
+
+str(records)
 ```
+
+I merge the two data frame for women and men to create a new data frame called
+records, which contains the same columns as men's and women's dataset. Here, I
+convert the `gender` and `country` to R factors for plotting purpose.
 
 Use functions in `"dplyr"` to compute the following frequency tables. Assign
 each table to its own object.
+
+### Frequency Table for number of records per country
 
 ```{r}
 # number of records per country
@@ -384,6 +442,10 @@ per_country = records %>%
 head(per_country)
 ```
 
+`per_country` is a frequency table containing the numbers of high jump records 
+per country from year 1912 to 1993 sorted by the alphabetic order of country
+name.
+
 ```{r}
 # number of records per country in descending order
 # object: per_country_desc
@@ -393,6 +455,11 @@ per_country_desc = per_country %>%
 # invoke head() on per_country_desc
 head(per_country_desc)
 ```
+
+`per_country_desc` is a frequency table containing the numbers of high jump 
+records per country from year 1912 to 1993 sorted by the descending order of 
+records counts. And we can see that USA has the most high jump records 
+during 1912 and 1993.
 
 ```{r}
 # number of records per year in descending order
@@ -406,6 +473,11 @@ per_year_desc = records %>%
 head(per_year_desc)
 ```
 
+`per_year_desc` is a frequency table containing the numbers of high jump records 
+per year from year 1912 to 1993 sorted by the descending order of records 
+counts. And we can see that the highest number of high jump records were made
+in 1961.
+
 ```{r}
 # number of records by gender
 # object: by_gender
@@ -417,9 +489,14 @@ by_gender = records %>%
 head(by_gender)
 ```
 
+`by_gender` is a frequency table containing the numbers of high jump records 
+seperated by gender from year 1912 to 1993 and sorted by the descending order 
+of records counts.
+
 Here is one more challenge that involves some data wrangling with `year`.
 The objective is to compute the number of records per decade (regardless of
 gender):
+
 ```{r}
 # number of records per decade (1920-1929, 1930-1939, 1940-1949, etc)
 # object: per_decade
@@ -428,10 +505,11 @@ per_year = records %>%
   summarise(records = n()) %>%
   arrange(year)
 
-
 intervals = seq(from = 1910, to = 2000, by = 10)
 decade_records = integer(9)
 
+# Use for loop to select appropriate years and count the sum of number 
+# of records in those selected years
 for (i in 1:length(decade_records)){
   filtered_year = filter(per_year, year >= intervals[i] , year < intervals[i+1])
   filtered_records = filtered_year[,2]
@@ -441,6 +519,7 @@ for (i in 1:length(decade_records)){
 decade_names = c("1910-1919", "1920-1929", "1930-1939","1940-1949","1950-1959",
             "1960-1969","1970-1979","1980-1989","1990-1999")
 
+# create a data frame with appropriate names per_decade
 per_decade = data.frame(
   decade = decade_names,
   records = decade_records,
@@ -449,6 +528,13 @@ per_decade = data.frame(
 # invoke head() on per_decade
 head(per_decade)
 ```
+
+`per_decade` is a frequency table containing the number of records per decade 
+regardless of gender and country and is sorted by earliest to latest year.
+The year interval used here is 1910-1929, 1920-1929, 1930-1939, 1940-1949, 
+1950-1959, 1960-1969, 1970-1979, 1980-1989, 1990-1999.
+And, we can see that the number of high jump world records made during 
+1980-1989 is the highest.
 
 -----
 
@@ -464,32 +550,60 @@ similar to those displayed in the PDF with the instructions for this project:
 # step-line plot, with points, showing the progression of records
 # (lines colored by gender)
 # (the default ggplot color values are: '#00BFC4', '#F8766D')
-date = records$date
-height = records$height
-gender = records$gender
 ggplot(records, aes(x = date, y = height, group = gender)) +
-  geom_point(aes(color = gender)) + 
+  geom_point(aes(color = gender), show.legend = FALSE) + 
+  geom_step(aes(color = gender), show.legend = FALSE) + 
+  annotate("text", x = as.Date("1990-06-01"), y = 1.90, label = "women", 
+           color = "#F8766D") + 
+  annotate("text", x = as.Date("1990-06-01"), y = 2.25, label = "men", 
+           color = "#00BFC4") + 
   ggtitle("High Jump World Records Progression (by gender)") +
-  geom_step(aes(color = gender)) + 
   theme_minimal() 
 ```
+
+### High Jump World Records Progression (by gender)
+The plot above is a step-line graph, with points, of the progression of the 
+high jump world records by gender. This graph shows the relationship between 
+world records and the time stamp of the creation of world records. Based on the 
+dataset of high jump world records for men and women, I plots each data point,
+joints them up with a step line and also color them seperately. From the plot,
+we can see that the overall pattern between the world records value and date 
+has a postivie association. Also, these two variables has approximately linear
+association. Because of the special properties of world records that it can 
+only increase, the relationship between world record and the time is mostly 
+likely to be positive.
+For both men's and women's high jump world records, we can see that world 
+records for both men and women plateaued several times, especially from 1941 
+to 1952 and from 1961 to 1971, then increase rapidly after the plateau 
+possibly due to some breakthroughs in high jump technique. 
+Also, the progression step-line for men's world records is absolutely 
+above the progression step-line for women's world records indicates that men
+may have advantage in high jump because of some physical reasons.
 
 ```{r}
 # step-line plot, with points, showing the progression of records
 # (facetting by gender)
-ggplot(records, aes(x = records$date, y = records$height)) +
-  geom_point(aes(color = gender)) + 
-  geom_step(aes(color = gender)) + 
+ggplot(records, aes(x = date, y = height)) +
+  geom_point(aes(color = gender), show.legend = FALSE) + 
+  geom_step(aes(color = gender), show.legend = FALSE) + 
   ggtitle("High Jump World Records Progression (by gender)") + 
   facet_grid(~ gender)
 ```
+
+### High Jump World Records Progression (by gender)
+The plot is a step-line graph, with points, for showing the progression of 
+high jump world records by gender. Here, I sliced the dataset by gender and 
+plot the relationship between world records and date by gender in sub-panels
+in the same plot. From the plot, we can compare the progression of men's and 
+women's high jump world records over time easily. The overall trends of their 
+progressions are both postive but men's world records is always higher than 
+women's world records. Also, by the end of 1977, women's world record reach 
+men's first world records created around 1912.
 
 ```{r}
 # step-line plot, with points, showing the progression of women records
 # (points colored by country)
 womens = filter(records, gender == "female")
-date = womens$date
-height = womens$height
 Country = womens$country
 ggplot(womens, aes(x = date, y = height)) +
   geom_step(color = "gray", size = 1) +
@@ -498,12 +612,19 @@ ggplot(womens, aes(x = date, y = height)) +
   theme_minimal()
 ```
 
+### Women's High Jump World Records Progression
+This plot is a step-line graph, with points, showing the progression of women 
+records. Also, in this plot, I made data points colored by country to 
+visualize the corresponding country for each record. From the plot, we can see 
+that world records are spread among different countries. And in some small 
+time interval, athelets from the same country created world records 
+consecutively, such as Romanian from 1958 to 1962, Great Britain from 1975 to
+1980.
+
 ```{r}
 # step-line plot, with points, showing the progression of men records
 # (points colored by country)
 mens = filter(records, gender == "male")
-date = mens$date
-height = mens$height
 Country = mens$country
 ggplot(mens, aes(x = date, y = height)) +
   geom_step(color = "gray", size = 1) +
@@ -511,6 +632,16 @@ ggplot(mens, aes(x = date, y = height)) +
   ggtitle("Men's High Jump World Records Progression") + 
   theme_minimal()
 ```
+
+### Men's High Jump World Records Progression
+This plot is a step-line graph, with points, showing the progression of men 
+records. Also, I made data points colored by country to visualize the 
+corresponding country for each record. We can see that before year 1960, most 
+of the world records were created by USA athlets and during year 1960 to 1967, 
+most of the world records were created by Russia athlets. And overall, before
+1980, men's world records only came from USA and Russia and after that, other 
+countries such as China, Cuba, West Germany, East Germany, Poland, Soviet Union
+and Sweden. 
 
 
 -----
@@ -533,6 +664,8 @@ women = subset(records, gender == "female")
 height = women$height
 year = women$year
 height_on_year_female = lm(height ~ year, data = women)
+height_on_year_female
+plot(height_on_year_female)
 ```
 
 Use the object `"lm"` object in the previous step to compute a "prediction"
@@ -541,10 +674,27 @@ of what the women's high jump world record could have been in years:
 
 ```{r}
 # predictions for olympic years
+predict_year = c(2000, 2004, 2008, 2012, 2016)
 years_for_prediction = data.frame(
-  year = c(2000, 2004, 2008, 2012, 2016))
-predict(height_on_year_female, years_for_prediction)
+  year = predict_year)
+predict_height_women = predict.lm(height_on_year_female, years_for_prediction)
+prediction_women = data.frame(
+  year = predict_year,
+  predict_height = predict_height_women
+)
+prediction_women
+ggplot(womens, aes(x = year, y = height)) + 
+  geom_point() +
+  ggtitle("Women's High Jump World Record Linear Regression Line") + 
+  stat_smooth(method = "lm", col = "red")
 ```
+
+I compute a linear model for women's high jump world record by regressing
+`height` on `year`. Then I use the computed linear model to predict the 
+women's high jump world record and the prediction output is displayed in 
+the above table. Also, to visualize how well the regression line fits, I plot
+the regression line on scatter plot. We can see that the regression
+line fits well with the original dataset. 
 
 
 ## Men's regression model
@@ -560,6 +710,8 @@ men = subset(records, gender == "male")
 height = men$height
 year = men$year
 height_on_year_male = lm(height ~ year, data = men)
+height_on_year_male
+plot(height_on_year_male)
 ```
 
 Use the object `"lm"` object in the previous step to compute a "prediction"
@@ -569,9 +721,26 @@ of what the men's high jump world record could have been in years:
 ```{r}
 # predictions for olympic years
 years_for_prediction = data.frame(
-  year = c(2000, 2004, 2008, 2012, 2016))
-predict(height_on_year_male, years_for_prediction)
+  year = predict_year)
+predict_height_men = predict.lm(height_on_year_male, years_for_prediction)
+prediction_men = data.frame(
+  year = predict_year,
+  predict_height = predict_height_men
+)
+prediction_men
+ggplot(mens, aes(x = year, y = height)) + 
+  geom_point() +
+  ggtitle("Men's High Jump World Record Linear Regression Line") + 
+  stat_smooth(method = "lm", col = "red")
 ```
+
+I compute a linear model for men's high jump world record by regressing
+`height` on `year`. Then I use the computed linear model to predict the 
+men's high jump world record and the prediction output is displayed in 
+the above table. Also, to visualize how well the regression line fits, I plot
+the regression line on scatter plot. We can see that the regression
+line fits well with the original dataset. 
+
 
 -----
 
@@ -604,7 +773,12 @@ problem, and the decisions you made to implement it in that way.
 ```{r}
 # Code for testing
 height_in_meters = records$height
+converted_height_string = character(length(height_in_meters))
+
 for (i in 1:length(height_in_meters)){
-  print(convert_height_units_numeric(height_in_meters[i]))
+  converted_height_string[i] = 
+    convert_height_units_string(height_in_meters[i])
 }
+
+converted_height_string
 ```

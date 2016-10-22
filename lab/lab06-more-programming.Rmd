@@ -143,8 +143,7 @@ expand_month = function(abr){
        "Nov" = month.name[11],
        "Dec" = month.name[12],
        "NA"
-       )  
-  
+       )
 }
 
 expand_month("Apr")

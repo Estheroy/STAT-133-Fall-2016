@@ -2,7 +2,6 @@
 # Description: Functions used in the midterm project
 # Author: Xuanpei Ouyang
 
-
 # Function to extract height value (in meters)
 extract_height = function(height_raw){
   # function for extract the numbers corresponding to the height value in 
@@ -10,6 +9,7 @@ extract_height = function(height_raw){
   # input: height_raw, a character vector with the metadata for the records
   # output: a numeric vector with the values for the records in meters
   
+  # extract all the numbers
   height_vec = str_extract(height_raw, "[0-9.]+")
   return(as.numeric(height_vec))
 }
@@ -21,6 +21,7 @@ extract_athlete = function(athlete_raw){
   #        country (inside parenthesis). 
   # output: a character vector with the first and last names of athletes.
   
+  # extract everything before "(" and remove the space
   names_without_country = str_split(athlete_raw, "\\(", simplify = TRUE)[,1]
   formatted_names = character(0)
   for (i in 1:length(names_without_country)){
@@ -100,6 +101,7 @@ reformat_date = function(date_raw){
   # function for reformating the date information
   # input: date_raw, a character vector with dat
   # output: a vector of class "Date" with format "%d %B %Y"
+  
   dates_vector = paste(extract_day(date_raw), 
                     extract_month(date_raw), extract_year(date_raw))
   dates = as.Date(dates_vector, format = "%d %B %Y")
@@ -113,20 +115,25 @@ reformat_date = function(date_raw){
 # reminder part of the result and convert it into inches by multiplying 12.
 # Then, to find the fraction part of inches, I multiple the decimal inches 
 # by 8, which is the largest denominator usually used for fraction inches.
-# Then calculate and round the integer part of the result as the numerator part
-# of inch fraction (8 is the denominator) and simplify the fraction to get
+# Then calculate and round the rest to its nearest 0.125 as the numerator 
+# part of fraction and (8 is the denominator) and simplify fraction to get
 # the correct fraction inches. Then finally passed all the parts of number
 # into convert_height_units_string function to get the formatted string
 # which containing all the information about the converted heights.
 #
-# I decided to turn this four part calculation into several lines of 
-# calculation codes. Convert_height_units_string function is used for 
-# converting the numeric height number in meters and inches into string value
+# I decided to implement this four part calculation into several lines of 
+# calculation and sub-function. 
+# Convert_height_units_string function is used for converting given input 
+# of feets value, inches value and fraction inches into formatted string 
+# with units.
 # convert_height_units_numeric function is used for converting the height in
-# meters into several numeric values in feets and inches. simplify_fraction
-# function is used for simplifying the fraction part of height in inches.
-# greatest_common_factor function is a help function for simplify_fraction
+# meters into several numeric values in feets and inches. 
+# simplify_fraction function is used for simplifying the fraction part of 
+# height in inches.
+# greatest_common_factor function is a helper function for simplify_fraction
 # function
+# round_to_fraction_inch is a helper function for rounding a decimal
+# number to the nearest 0.125
 
 convert_height_units_string = function(height_in_meters){
   # function for converting height units from parts of numbers to string
@@ -138,36 +145,62 @@ convert_height_units_string = function(height_in_meters){
   #                               denominator part
   # output: string value of height in feets and inches
   
+  # get values for feet, inches, and fraction inches
   height_in_feets_inches = convert_height_units_numeric(height_in_meters)
-  
   feet = height_in_feets_inches[1]
   inch_int = height_in_feets_inches[2]
   inch_frac_numerator = height_in_feets_inches[3]
   inch_frac_denominator = height_in_feets_inches[4]
-  if(inch_frac_numerator == 0){
-    
+  
+  # format the feet string part
+  height_string_in_feet_inches = paste(feet, "ft", inch_int)
+  
+  # deal with the edge case that the fraction part is 0, then ignore the 
+  # fraction and add units directly. Else, format the fraction inches part
+  # as well
+  if(inch_frac_numerator != 0){
+    fraction_string = paste0(inch_frac_numerator, "/", inch_frac_denominator)
+    height_string = paste(height_string_in_feet_inches, fraction_string, "in")
+  } else {
+    height_string = paste(height_string_in_feet_inches, "in")  
   }
   
-} 
+  return(height_string)
+}
 
 convert_height_units_numeric = function(height_in_meters){
   # function for converting values in meters to US customary units
   # input: height_in_meters, a numeric height value (in meters) 
   # output: a character vector in US customary units
   
+  # calculate the feet and inch by taking the integer part of result
   height_in_feet_int = floor(height_in_meters * 3.2808399) 
-  
   height_in_feet_decimal = (height_in_meters * 3.2808399) - height_in_feet_int 
-
   decimal_in_inch_int = floor(height_in_feet_decimal * 12)
-  
   decimal_in_inch_decimal = (height_in_feet_decimal * 12) - decimal_in_inch_int
+  rounded_inch = round_to_fraction_inch(decimal_in_inch_decimal)
   
-  fraction_numerator = round(decimal_in_inch_decimal * 8)
-  inch_fraction_part = simplify_fraction(fraction_numerator, 8)
+  # deal with the edge case that inch_decimal is rounded to 1 when rounding 
+  # it to its nearest 0.125
+  if(rounded_inch == 1){
+    decimal_in_inch_int = decimal_in_inch_int + 1
+    inch_fraction_part = c(0, 0)
+  } else {
+    fraction_numerator = rounded_inch / 0.125
+    inch_fraction_part = simplify_fraction(fraction_numerator, 8)
+  }
   
   return(c(height_in_feet_int, decimal_in_inch_int, inch_fraction_part[1], 
            inch_fraction_part[2]))
+}
+
+round_to_fraction_inch = function(num){
+  # function for rounding a decimal number to the nearest 0.125
+  # input: num, a numeric value needed to be rounded
+  # output: a value rounded to the nearest 0.125 
+  
+  round_num = 0.125 * round(num / 0.125)
+  return(round_num)
 }
 
 simplify_fraction = function(numerator = 1, denominator = 1){
@@ -179,8 +212,10 @@ simplify_fraction = function(numerator = 1, denominator = 1){
   #         simplified_denominator, a numeric value as simplified_denominator
   
   greatest_common_factor_fraction = 
-    greatest_common_factor(numerator, denominator)
+       greatest_common_factor(numerator, denominator)
   
+  # simplify fraction by dividing both numerator and denominator by their
+  # greatest common factor
   simplified_numerator = numerator / greatest_common_factor_fraction
   simplified_denominator = denominator / greatest_common_factor_fraction
   return(c(simplified_numerator, simplified_denominator))
@@ -192,6 +227,8 @@ greatest_common_factor = function(first_number = 1, second_number = 1){
   #        second_number, a numeric value
   # output: a numeric value as the greatest common factor
   
+  # use while loop to divide second number from first number multiple times
+  # to find the greatest common factor
   while(second_number > 0){
     temp_second_number = second_number
     second_number = first_number %% second_number
@@ -199,4 +236,3 @@ greatest_common_factor = function(first_number = 1, second_number = 1){
   }
   return(first_number)
 }
-
