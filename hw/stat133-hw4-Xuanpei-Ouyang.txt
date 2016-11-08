@@ -1,0 +1,67 @@
+STAT 133 Homework 4 
+Xuanpei Ouyang
+
+Part 1:
+mkdir stat133-hw4
+cd stat133-hw4
+curl -O http://textfiles.com/food/bread.txt
+ls
+curl -O http://textfiles.com/food/btaco.txt
+curl -O http://textfiles.com/food/1st_aid.txt
+curl -O http://textfiles.com/food/beesherb.txt
+
+
+curl -O http://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv 
+curl -O http://www.math.uah.edu/stat/data/Fisher.csv
+curl -O http://web.pdx.edu/~gerbing/data/cars.csv
+
+ls -l 
+mkdir data
+cd data
+mkdir txt-files
+mkdir csv-files
+
+mv ../bread.txt ./txt-files
+mv ../*.txt ./txt-files
+mv ../*.csv ./csv-files
+
+cd ..
+mkdir copies
+cp ./data/txt-files/bread.txt ./copies
+cp ./data/txt-files/*.txt ./copies
+cp ./data/csv-files/*.csv ./copies
+cd copies
+mv bread.txt bread-recipe.txt
+mv Fisher.csv iris.csv
+mv btaco.txt breakfast-taco.txt
+cd ..
+mv copies copy-files
+man rm
+rm -r copy-files
+ls ./data/txt-files | sort -r
+
+Part 2 Rediction, Pipes, and other commands:
+
+mkdir pipelines
+cd pipelines
+curl -O https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2016/master/data/cpds.csv
+ls
+head cpds.csv
+tail cpds.csv
+
+cut -f 2 -d "," cpds.csv
+cut -f 2 -d "," cpds.csv | less
+cut -f 2 -d "," cpds.csv | head -n 5
+cut -f 2 -d "," cpds.csv | tail -n 3
+cut -f 2 -d "," cpds.csv | uniq
+cut -f 2 -d "," cpds.csv | uniq -c
+
+grep "1960" cpds.csv
+grep "1960" cpds.csv > cpds-1960.csv
+grep "USA" cpds.csv
+grep "USA" cpds.csv > cpds-usa.csv
+grep "19[6|7]0" cpds.csv
+grep "\"S" cpds.csv
+cut -f 1,2,6 -d "," cpds.csv | grep "1960" | sort -k 3 -t ","
+grep "Iceland" cpds.csv | cut -f 4 -d "," | grep "NA" -c
+grep "Iceland" cpds.csv | cut -f 5 -d "," | grep "-" -c
