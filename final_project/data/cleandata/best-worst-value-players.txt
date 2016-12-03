@@ -1,0 +1,46 @@
+# A tibble: 20 × 1
+         `Top 20 Players`
+                    <chr>
+1           Dahntay Jones
+2           Briante Weber
+3             Tim Frazier
+4         Jordan Hamilton
+5        Jared Cunningham
+6          Xavier Munford
+7            Ray McCallum
+8              Henry Sims
+9             Chuck Hayes
+10          Jordan Farmar
+11        Michael Beasley
+12        Sean Kilpatrick
+13          Alan Williams
+14            Coty Clarke
+15 Thanasis Antetokounmpo
+16           Axel Toupane
+17           Phil Pressey
+18        Elliot Williams
+19           Jordan McRae
+20          Justin Harper
+# A tibble: 20 × 1
+   `Bottom 20 Players`
+                 <chr>
+1       Andre Iguodala
+2        Iman Shumpert
+3          Kobe Bryant
+4          Joakim Noah
+5          Chris Kaman
+6            Omer Asik
+7         Joel Anthony
+8        Kevin Garnett
+9          James Young
+10           David Lee
+11         Roy Hibbert
+12           Ty Lawson
+13         Joe Johnson
+14      Jason Thompson
+15      Nikola Pekovic
+16         Erick Green
+17        Kirk Hinrich
+18          Sam Dekker
+19       Bruno Caboclo
+20        J.J. O'Brien

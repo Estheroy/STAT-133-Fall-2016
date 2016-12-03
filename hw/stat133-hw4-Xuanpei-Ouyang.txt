@@ -1,67 +1,179 @@
-STAT 133 Homework 4 
-Xuanpei Ouyang
+---
+title: "HW04 - Bash commands"
+author: "Xuanpei Ouyang"
+date: "Nov 8, 2016"
+output: html_document
+subtitle: Stat 133, Fall 2016, Prof. Sanchez
+---
 
-Part 1:
+# Part 1
+# create a directory called stat133-hw4 use `mkdir`
 mkdir stat133-hw4
+
+# change to the directory stat133-hw4 use `cd`
 cd stat133-hw4
+
+# use the command `curl` to download the following text file
 curl -O http://textfiles.com/food/bread.txt
+
+# list the contents in your current directory
 ls
+
+# use the command `curl` to download these other text files
 curl -O http://textfiles.com/food/btaco.txt
 curl -O http://textfiles.com/food/1st_aid.txt
 curl -O http://textfiles.com/food/beesherb.txt
 
-
+# use the command `curl` to download the following csv files
 curl -O http://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv 
 curl -O http://www.math.uah.edu/stat/data/Fisher.csv
 curl -O http://web.pdx.edu/~gerbing/data/cars.csv
 
+# use `ls -l` to list the contents in your current directory in long format
 ls -l 
+
+# inside `stat133-hw4` create a directory `data`
 mkdir data
+
+# change to the directory `data`
 cd data
+
+# create a directory `txt-files`
 mkdir txt-files
+
+# create a directory `csv-files`
 mkdir csv-files
 
+# use the command `mv` to move the `bread.txt` file to `txt-files`
 mv ../bread.txt ./txt-files
+
+# use the wildcard `*` to move all the text files to `txt-files`
 mv ../*.txt ./txt-files
+
+# use the wildcard `*` to move all the `.csv` files to `csv-files`
 mv ../*.csv ./csv-files
 
+# use `cd` to go back to the parent directory `stat133-hw4`
 cd ..
+
+# create a directory `copies`
 mkdir copies
+
+# use the command `cp` to copy the `bread.txt` file, that is in 
+# the folder `txt-files`, to the `copies` directory
 cp ./data/txt-files/bread.txt ./copies
+ 
+# use `cp` to copy all the `.txt` files in the directory `copies`
 cp ./data/txt-files/*.txt ./copies
+
+# use `cp` to copy all the `.csv` files in the directory `copies`
 cp ./data/csv-files/*.csv ./copies
+
+# change to directory `copies`
 cd copies
+
+# use the command `mv` to rename the file `bread.txt` as 
+# `bread-recipe.txt`
 mv bread.txt bread-recipe.txt
+
+# use `mv` to rename the file `Fisher.csv` as `iris.csv`
 mv Fisher.csv iris.csv
+
+# use `mv` to rename the file `btaco.txt` as `breakfast-taco.txt`
 mv btaco.txt breakfast-taco.txt
+
+# change to the parent directory (i.e. `stat133-hw4`)
 cd ..
+
+# use `mv` to rename the directory `copies` to `copy-files` 
 mv copies copy-files
+
+# display the man instruction page for rm
 man rm
+
+# use `rm -r` to recursively remove directory copy-files
 rm -r copy-files
+
+# use `ls` to list 
 ls ./data/txt-files | sort -r
 
-Part 2 Rediction, Pipes, and other commands:
+# Part 2 Rediction, Pipes, and other commands
 
+# create a direcotry `pipelines`
 mkdir pipelines
+
+# change to directory `pipelines`
 cd pipelines
+
+# use `curl` to download the csv data file
 curl -O https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2016/master/data/cpds.csv
+
+# list the fils in the current directory and display the begining and
+# the end of the csv file to terminal
 ls
 head cpds.csv
 tail cpds.csv
 
+# use -f 2 to cut column 2 and -d "," to specify the delimiter is ","
 cut -f 2 -d "," cpds.csv
+
+# and pipe the result to less to display the content in terminal
 cut -f 2 -d "," cpds.csv | less
+
+# and pipe the result to head with argument -n 5 to display the 
+# first 5 lines of the result
 cut -f 2 -d "," cpds.csv | head -n 5
+
+# and pipe the result to head with argument -n 5 to display the
+# last 3 lines of the result
 cut -f 2 -d "," cpds.csv | tail -n 3
+
+# and pipe the result to head with argument -n 5 to display unique
+# country names
 cut -f 2 -d "," cpds.csv | uniq
+
+# and pipe the result to head with argument -n 5 to display the number
+# of  unique country names
 cut -f 2 -d "," cpds.csv | uniq -c
 
+# use `grep` with argument "1960 "to display those lines of `cpds.csv` 
+# for `year` 1960
 grep "1960" cpds.csv
+
+# and redirect the result from previous command to a csv file `cpds-1960.csv`
 grep "1960" cpds.csv > cpds-1960.csv
+
+# use `grep` with argument "USA" to display those lines of `cpds.csv` 
+# for `country` USA
 grep "USA" cpds.csv
+
+# and redirect the result from previous command to a csv file `cpds-usa.csv`
 grep "USA" cpds.csv > cpds-usa.csv
+
+# use `grep` with regex argument "19[6|7]0" to display those lines of 
+# `cpds.csv` for years 1960 and 1970
 grep "19[6|7]0" cpds.csv
+
+# use `grep` with regex argument "\"S" ("S) to extarct name begins with the 
+# letter `"S"` (e.g. Spain, Sweden, Switzerland)
 grep "\"S" cpds.csv
+
+# use `cut` -f 1,2,6 to cut column 1,2 and 6 and use -d "," set the 
+# delimiter to "," in cpds.csv file, pipe and result to grep "1960"
+# to get those lines of `cpds.csv` for `year` 1960, and pipe the reuslt
+# to sort with -k 3 to specify sort by column 3 and -t "," to set the
+# delimiter to ","
 cut -f 1,2,6 -d "," cpds.csv | grep "1960" | sort -k 3 -t ","
+
+# use `grep` to get those lines of `cpds.csv` for Iceland,
+# pipe the result to cut, use -f 4 to cut column 4, -d "," to set the
+# delimiter to ",", then pipe the result to command grep with argument
+# "NA" -c to display the number of lines including "NA"  
 grep "Iceland" cpds.csv | cut -f 4 -d "," | grep "NA" -c
+
+# use `grep` to get those lines of `cpds.csv` for Iceland,
+# pipe the result to cur, use -f to cut column 5, -d "," to set
+# the delimiter to ",", then pipe the result to `grep "-" -c`
+# to display the number of lines including - to count negative
+# numbers 
 grep "Iceland" cpds.csv | cut -f 5 -d "," | grep "-" -c
